@@ -24,11 +24,8 @@ Web Api with for loan contract to generate all bills according to the number of 
 *  Contract Entity:  
 &ensp;Id - key autoincrement, contract data, number of installments, amount financed, value of installments  
 *  Installment Entity:  
-&ensp;Contract, expiration date, payment date, amount, status: Open, Delayed, Marked
-
-### Logic
-  
-&ensp;The Status field must be calculated based on the due date, current date and payment date field, and is not stored in the bank:  
+&ensp;Contract, expiration date, payment date, amount, status: Open, Delayed, Marked  
+&ensp;The Status field must be calculated based on:  
     1. Open:  
 &ensp;due date >= current date and has no payment date  
     2. Delayed:  
