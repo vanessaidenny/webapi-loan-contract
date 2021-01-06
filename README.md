@@ -8,6 +8,8 @@ Web Api with for loan contract to generate all bills according to the number of 
 ### Table of Contents
 
 - [Features](#features)
+  - [Entities Structure](#structure)
+  - [Logic](#logic)
   - [Documentation](#documentation)
   - [Testing](#testing)
 - [References](#references)
@@ -15,6 +17,24 @@ Web Api with for loan contract to generate all bills according to the number of 
 
 <a name="features"></a>
 ## ⚙️ Features
+
+<a name="structure"></a>
+### Entities Structure
+
+*  Contract Entity:  
+&ensp;Id - key autoincrement, contract data, number of installments, amount financed, value of installments  
+*  Installment Entity:  
+&ensp;Contract, expiration date, payment date, amount, status: Open, Delayed, Marked
+
+### Logic
+  
+&ensp;The Status field must be calculated based on the due date, current date and payment date field, and is not stored in the bank:  
+    1. Open:  
+&ensp;due date >= current date and has no payment date
+    2. Delayed:  
+&ensp;due date < current date and has no payment date  
+    3. Marked:  
+&ensp;payment date not null  
 
 <a name="documentation"></a>
 ### Documentation
