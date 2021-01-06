@@ -8,7 +8,7 @@ Web Api with for loan contract to generate all bills according to the number of 
 ### Table of Contents
 
 - [Features](#features)
-  - [Entities Structure](#structure)
+  - [Structure](#structure)
   - [Logic](#logic)
   - [Documentation](#documentation)
   - [Testing](#testing)
@@ -19,7 +19,7 @@ Web Api with for loan contract to generate all bills according to the number of 
 ## ⚙️ Features
 
 <a name="structure"></a>
-### Entities Structure
+### Structure
 
 *  Contract Entity:  
 &ensp;Id - key autoincrement, contract data, number of installments, amount financed, value of installments  
