@@ -30,7 +30,7 @@ Web Api with for loan contract to generate all bills according to the number of 
   
 &ensp;The Status field must be calculated based on the due date, current date and payment date field, and is not stored in the bank:  
     1. Open:  
-&ensp;due date >= current date and has no payment date
+&ensp;due date >= current date and has no payment date  
     2. Delayed:  
 &ensp;due date < current date and has no payment date  
     3. Marked:  
@@ -39,8 +39,7 @@ Web Api with for loan contract to generate all bills according to the number of 
 <a name="documentation"></a>
 ### Documentation
 
-- [ ] Build an REST API
-- [ ] Create an application with contract and installment entities
+- [ ] Create an web api with contract and installment entities
 - [ ] Cache data in memory - Implement InMemoryCache
 - [ ] Implement feature flags to enable or disable the cache
 - [ ] Implement Swagger package
