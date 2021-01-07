@@ -3,13 +3,12 @@
  
 # Web Api Loan Contract
 
-Web Api with for loan contract to generate all bills according to the number of installments
+Web Api for loan contract to generate all bills according to the number of installments
 
 ### Table of Contents
 
 - [Features](#features)
   - [Structure](#structure)
-  - [Logic](#logic)
   - [Documentation](#documentation)
   - [Testing](#testing)
 - [References](#references)
@@ -27,11 +26,11 @@ Web Api with for loan contract to generate all bills according to the number of 
 &ensp;Contract, expiration date, payment date, amount, status: Open, Delayed, Marked  
 &ensp;The Status field must be calculated based on:  
     1. Open:  
-&ensp;due date >= current date and has no payment date  
+    due date >= current date and has no payment date  
     2. Delayed:  
-&ensp;due date < current date and has no payment date  
+    due date < current date and has no payment date  
     3. Marked:  
-&ensp;payment date not null  
+    payment date not null  
 
 <a name="documentation"></a>
 ### Documentation
