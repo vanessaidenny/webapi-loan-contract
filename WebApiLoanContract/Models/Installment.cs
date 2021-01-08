@@ -1,11 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiLoanContract.Models
 {
     public class Installment
     {        
-        public Contract Contract { get; set; }
+        [ForeignKey("ContractId")]
+        public int Contract { get; set; }
 
         [Display(Name = "Insert the expiration date")]
         [Required(ErrorMessage = "Required field")]
@@ -25,6 +27,6 @@ namespace WebApiLoanContract.Models
 
         [Display(Name = "Status")]
         [Required(ErrorMessage = "Required field")]
-        public StatusList Status { get; set; }
+        public virtual StatusList Status { get; set; }
     }
 }
