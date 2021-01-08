@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApiLoanContract.Models
@@ -20,7 +21,6 @@ namespace WebApiLoanContract.Models
         [Required(ErrorMessage = "Required field")]
         [Range(1, int.MaxValue, ErrorMessage = "The amount must be valid")]
         public decimal AmountFinanced { get; set; }
-
-        public Installment Installments { get; set; }
+        public virtual ICollection<Installment> Installments { get; set; }
     }
 }
