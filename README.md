@@ -21,7 +21,7 @@ Web Api for loan contract to generate all bills according to the number of insta
 ### Structure
 
 *  Contract Entity:  
-&ensp;Id - key autoincrement, contract data, number of installments, amount financed, installments  
+&ensp;Id - key autoincrement, contract date, number of installments, amount financed, installments  
 *  Installment Entity:  
 &ensp;Contract, expiration date, payment date, amount, status: Open, Delayed, Marked  
 &ensp;The Status field must be calculated based on:  
@@ -35,11 +35,11 @@ Web Api for loan contract to generate all bills according to the number of insta
 <a name="documentation"></a>
 ### Documentation
 
-- [ ] Create an web api with contract and installment entities
+- [X] Create an web api with contract and installment entities
 - [ ] API REST standard - create, list, edit, exclude
 - [ ] Cache data in memory - Implement InMemoryCache
 - [ ] Implement feature flags to enable or disable the cache
-- [ ] Implement Swagger package
+- [X] Implement Swagger package
 - [ ] Adaptation of scenarios when the API is unreachable and/or returns data other than expected
 
 <a name="testing"></a>
