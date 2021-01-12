@@ -13,7 +13,7 @@ namespace WebApiLoanContract.Controllers
     public class ContractController : ControllerBase
     {
         /// <summary>
-        /// List all contracts
+        /// List all contracts with installments
         /// </summary>
         [HttpGet]
         [Route("")]
@@ -28,6 +28,22 @@ namespace WebApiLoanContract.Controllers
                     .ToListAsync();
             }
             return contracts;
+        }
+
+        /// <summary>
+        /// List one contract with installments
+        /// </summary>
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<Contract>> GetById(
+            [FromServices] DataContext context,
+            int id)
+        {
+            var contract = await context.Contracts.FindAsync(id);
+            contract.Installments = await context.Installments
+                .Where(x => contract.ContractId == x.ContractId)
+                .ToListAsync();
+            return contract;
         }
 
         /// <summary>
