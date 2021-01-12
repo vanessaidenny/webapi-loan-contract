@@ -34,6 +34,11 @@ namespace WebApiLoanContract.Controllers
             _service = service;
         }
 
+        public static class FeatureFlags
+        {
+            public const string MemoryCache = "MemoryCache";
+        }
+
         /// <summary>
         /// List all contracts with installments
         /// </summary>
@@ -41,13 +46,18 @@ namespace WebApiLoanContract.Controllers
         [Route("")]
         public async Task<ActionResult<List<Contract>>> CacheGetOrCreate()
         {
-            var cacheEntry = await
+            var cacheIsEnabled = _featureManager.IsEnabledAsync(FeatureFlags.MemoryCache);
+            
+            if(!await cacheIsEnabled)
+            {
+                _cache.Remove(_context.Contracts);
+            }
+            return await
                 _cache.GetOrCreateAsync(_context.Contracts.ToListAsync(), entry => 
                 {
                     entry.SlidingExpiration = TimeSpan.FromSeconds(3);
                     return _service.GetContracts();
                 });
-            return cacheEntry;
         }
 
         /// <summary>
