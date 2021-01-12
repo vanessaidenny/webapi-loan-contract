@@ -38,7 +38,7 @@ Web Api for loan contract to generate all bills according to the number of insta
 - [X] Create an web api with contract and installment entities
 - [ ] RESTful actions - get, post, put and delete - for contract entity
 - [X] Cache data in memory - Implement InMemoryCache
-- [ ] Implement feature flags to enable or disable the cache
+- [X] Implement feature flags to enable or disable the cache
 - [X] Implement Swagger package
 
 <a name="testing"></a>
