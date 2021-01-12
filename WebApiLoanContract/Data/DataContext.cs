@@ -12,5 +12,14 @@ namespace WebApiLoanContract.Data
 
         public DbSet<Installment> Installments { get; set; }
         public DbSet<Contract> Contracts { get; set; }
+            
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Contract>()
+                .HasMany(c => c.Installments)
+                .WithOne(i => i.Contract);
+        }
     }
 }
