@@ -22,5 +22,26 @@ namespace WebApiLoanContract.Controllers
             var contracts = await context.Contracts.ToListAsync();
             return contracts;
         }
+
+        /// <summary>
+        /// Create and post all contracts
+        /// </summary>
+        [HttpPost]
+        [Route("")]
+        public async Task<ActionResult<Contract>> Post(
+            [FromServices] DataContext context,
+            [FromBody] Contract model)
+        {
+            if (ModelState.IsValid)
+            {
+                context.Contracts.Add(model);
+                await context.SaveChangesAsync();
+                return model;
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
     }
 }
