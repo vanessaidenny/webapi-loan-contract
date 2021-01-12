@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApiLoanContract.Data;
@@ -25,6 +26,7 @@ namespace WebApiLoanContract
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             services.AddScoped<DataContext, DataContext>();
             services.AddControllers();
+            services.AddFeatureManagement();
             services.AddMemoryCache();
             services.AddTransient<IContractService, ContractService>();
             services.AddSwaggerGen(c =>

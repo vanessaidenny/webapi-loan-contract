@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.FeatureManagement;
 using WebApiLoanContract.Data;
 using WebApiLoanContract.Models;
 using WebApiLoanContract.Services;
@@ -15,17 +16,20 @@ namespace WebApiLoanContract.Controllers
     [Route("contracts")]
     public class ContractController : ControllerBase
     {
-        private IMemoryCache _cache;        
+        private IMemoryCache _cache;       
+        private IFeatureManager _featureManager; 
         private readonly DataContext _context;
         private readonly IContractService _service;
 
         public ContractController(
             IMemoryCache memoryCache,
+            IFeatureManager featureManager,
             DataContext context,
             IContractService service
         )
         {
             _cache = memoryCache;
+            _featureManager = featureManager;
             _context = context;
             _service = service;
         }
