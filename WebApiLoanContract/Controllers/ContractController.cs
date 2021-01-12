@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,17 @@ namespace WebApiLoanContract.Controllers
             [FromServices] DataContext context)
         {            
             var contracts = await context.Contracts.ToListAsync();
+            foreach(var contract in contracts)
+            {
+                contract.Installments = await context.Installments
+                    .Where(x => contract.ContractId == x.ContractId)
+                    .ToListAsync();
+            }
             return contracts;
         }
 
         /// <summary>
-        /// Create and post all contracts
+        /// Create and post all contracts with installments
         /// </summary>
         [HttpPost]
         [Route("")]
@@ -34,6 +41,10 @@ namespace WebApiLoanContract.Controllers
         {
             if (ModelState.IsValid)
             {
+                for (var i=1; i<model.NumberInstallments; i++)
+                {
+                    model.Installments.Add(new Installment());
+                }
                 context.Contracts.Add(model);
                 await context.SaveChangesAsync();
                 return model;
