@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WebApiLoanContract.Data;
 using WebApiLoanContract.Models;
+using WebApiLoanContract.Services;
 
 namespace WebApiLoanContract.Controllers
 {
@@ -12,22 +15,35 @@ namespace WebApiLoanContract.Controllers
     [Route("contracts")]
     public class ContractController : ControllerBase
     {
+        private IMemoryCache _cache;        
+        private readonly DataContext _context;
+        private readonly IContractService _service;
+
+        public ContractController(
+            IMemoryCache memoryCache,
+            DataContext context,
+            IContractService service
+        )
+        {
+            _cache = memoryCache;
+            _context = context;
+            _service = service;
+        }
+
         /// <summary>
         /// List all contracts with installments
         /// </summary>
         [HttpGet]
         [Route("")]
-        public async Task<ActionResult<List<Contract>>> Get(
-            [FromServices] DataContext context)
-        {            
-            var contracts = await context.Contracts.ToListAsync();
-            foreach(var contract in contracts)
-            {
-                contract.Installments = await context.Installments
-                    .Where(x => contract.ContractId == x.ContractId)
-                    .ToListAsync();
-            }
-            return contracts;
+        public async Task<ActionResult<List<Contract>>> CacheGetOrCreate()
+        {
+            var cacheEntry = await
+                _cache.GetOrCreateAsync(_context.Contracts.ToListAsync(), entry => 
+                {
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(3);
+                    return _service.GetContracts();
+                });
+            return cacheEntry;
         }
 
         /// <summary>
@@ -35,12 +51,10 @@ namespace WebApiLoanContract.Controllers
         /// </summary>
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<Contract>> GetById(
-            [FromServices] DataContext context,
-            int id)
+        public async Task<Contract> GetById(int id)
         {
-            var contract = await context.Contracts.FindAsync(id);
-            contract.Installments = await context.Installments
+            var contract = await _context.Contracts.FindAsync(id);
+            contract.Installments = await _context.Installments
                 .Where(x => contract.ContractId == x.ContractId)
                 .ToListAsync();
             return contract;
@@ -52,7 +66,6 @@ namespace WebApiLoanContract.Controllers
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<Contract>> Post(
-            [FromServices] DataContext context,
             [FromBody] Contract model)
         {
             if (ModelState.IsValid)
@@ -61,8 +74,8 @@ namespace WebApiLoanContract.Controllers
                 {
                     model.Installments.Add(new Installment());
                 }
-                context.Contracts.Add(model);
-                await context.SaveChangesAsync();
+                _context.Contracts.Add(model);
+                await _context.SaveChangesAsync();
                 return model;
             }
             else
