@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApiLoanContract.Data;
+using WebApiLoanContract.Services;
 
 namespace WebApiLoanContract
 {
@@ -24,6 +25,8 @@ namespace WebApiLoanContract
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             services.AddScoped<DataContext, DataContext>();
             services.AddControllers();
+            services.AddMemoryCache();
+            services.AddTransient<IContractService, ContractService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiLoanContract", Version = "v1" });
