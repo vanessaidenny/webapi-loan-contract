@@ -7,9 +7,8 @@ namespace WebApiLoanContract.Models
     public class Contract
     {
         [Key]
-        public int ContractId { get {return ContractId;} private set{ } }
+        public int ContractId { get; private set; }
 
-        [Display(Name = "Insert the contract date")]
         [Required(ErrorMessage = "Required field")]
         [DataType(DataType.Date, ErrorMessage = "Insert a date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -21,6 +20,7 @@ namespace WebApiLoanContract.Models
         [Required(ErrorMessage = "Required field")]
         [Range(1, int.MaxValue, ErrorMessage = "The amount must be valid")]
         public decimal AmountFinanced { get; set; }
-        public virtual ICollection<Installment> Installments { get; set; }
+    
+        public List<Installment> Installments { get; set; }
     }
 }
