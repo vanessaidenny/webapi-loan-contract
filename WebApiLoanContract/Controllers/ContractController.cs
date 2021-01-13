@@ -119,14 +119,56 @@ namespace WebApiLoanContract.Controllers
             _context.Contracts.Remove(contract);
             
             // Remove installments
-            var prestacoes = await _context.Installments            
+            var installments = await _context.Installments            
                 .Where(x => contract.ContractId == x.ContractId)
                 .ToArrayAsync();
-            _context.Installments.RemoveRange(prestacoes);
+            _context.Installments.RemoveRange(installments);
 
             // Return contracts
             await _context.SaveChangesAsync();
             return contract;
+        }
+
+        /// <summary>
+        /// Apply a delta update to a resource representation
+        /// </summary>
+        /// <param name="ContractPatchRequest request"></param>
+        /// <returns> Update the contract data
+        [HttpPatch]
+        [Route("{id:int}")]
+        public async Task<ActionResult<Contract>> Patch(
+            [FromBody] ContractPatchRequest request,
+            int id)
+        {
+            // Change data
+            var contract = await _context.Contracts.FindAsync(id);
+            if(contract == null)
+                return NotFound();
+            
+            contract.NumberInstallments = request.NumberInstallments;
+            contract.AmountFinanced = request.AmountFinanced;
+
+            // Remove installments
+            var installments = await _context.Installments            
+                .Where(x => contract.ContractId == x.ContractId)
+                .ToArrayAsync();
+            _context.Installments.RemoveRange(installments);
+
+            // Add new installments
+            if (ModelState.IsValid)
+            {
+                for (var i=1; i<request.NumberInstallments; i++)
+                {
+                    request.Installments.Add(new Installment());
+                }
+                contract.Installments = request.Installments;
+                await _context.SaveChangesAsync();
+                return contract;
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
     }
 }
