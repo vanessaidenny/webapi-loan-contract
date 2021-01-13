@@ -109,7 +109,7 @@ namespace WebApiLoanContract.Controllers
         /// Search for the contract by id and remove it
         /// </summary>
         /// <param name="Contract model"></param>
-        /// <returns> Remove the contract
+        /// <returns> Remove the contract with installments
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<Contract> Delete(int id)
@@ -117,6 +117,12 @@ namespace WebApiLoanContract.Controllers
             // Remove contracts
             var contract = await _context.Contracts.FindAsync(id);
             _context.Contracts.Remove(contract);
+            
+            // Remove installments
+            var prestacoes = await _context.Installments            
+                .Where(x => contract.ContractId == x.ContractId)
+                .ToArrayAsync();
+            _context.Installments.RemoveRange(prestacoes);
 
             // Return contracts
             await _context.SaveChangesAsync();
