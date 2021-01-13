@@ -71,11 +71,7 @@ namespace WebApiLoanContract.Controllers
         [Route("{id:int}")]
         public async Task<Contract> GetById(int id)
         {
-            var contract = await _context.Contracts.FindAsync(id);
-            contract.Installments = await _context.Installments
-                .Where(x => contract.ContractId == x.ContractId)
-                .ToListAsync();
-            return contract;
+            return await _service.GetContractsById(id);
         }
 
         /// <summary>
@@ -91,18 +87,12 @@ namespace WebApiLoanContract.Controllers
         {
             if (ModelState.IsValid)
             {
-                for (var i=1; i<model.NumberInstallments; i++)
-                {
-                    model.Installments.Add(new Installment());
-                }
-                _context.Contracts.Add(model);
-                await _context.SaveChangesAsync();
-                return model;
+                return await _service.InsertInstallments(model);
             }
             else
             {
                 return BadRequest(ModelState);
-            }
+            }           
         }
 
         /// <summary>
@@ -114,19 +104,7 @@ namespace WebApiLoanContract.Controllers
         [Route("{id:int}")]
         public async Task<Contract> Delete(int id)
         {
-            // Remove contracts
-            var contract = await _context.Contracts.FindAsync(id);
-            _context.Contracts.Remove(contract);
-            
-            // Remove installments
-            var installments = await _context.Installments            
-                .Where(x => contract.ContractId == x.ContractId)
-                .ToArrayAsync();
-            _context.Installments.RemoveRange(installments);
-
-            // Return contracts
-            await _context.SaveChangesAsync();
-            return contract;
+           return await _service.RemoveContract(id);
         }
 
         /// <summary>
@@ -140,33 +118,18 @@ namespace WebApiLoanContract.Controllers
             [FromBody] ContractPatchRequest request,
             int id)
         {
-            // Change data
             var contract = await _context.Contracts.FindAsync(id);
             if(contract == null)
                 return NotFound();
             
             contract.NumberInstallments = request.NumberInstallments;
             contract.AmountFinanced = request.AmountFinanced;
-
-            // Remove installments
-            var installments = await _context.Installments            
-                .Where(x => contract.ContractId == x.ContractId)
-                .ToArrayAsync();
-            _context.Installments.RemoveRange(installments);
-
-            // Add new installments
-            if (ModelState.IsValid)
-            {
-                for (var i=1; i<request.NumberInstallments; i++)
-                {
-                    request.Installments.Add(new Installment());
-                }
-                contract.Installments = request.Installments;
-                await _context.SaveChangesAsync();
-                return contract;
-            }
-            else
-            {
+            contract = await _service.RemoveInstallments(id);
+            
+            if (ModelState.IsValid) {
+                var contractPatch = await _service.InsertInstallmentsPatch(request, contract);
+                return contractPatch;
+            } else {
                 return BadRequest(ModelState);
             }
         }
