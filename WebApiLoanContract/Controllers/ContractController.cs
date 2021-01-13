@@ -104,5 +104,23 @@ namespace WebApiLoanContract.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        /// <summary>
+        /// Search for the contract by id and remove it
+        /// </summary>
+        /// <param name="Contract model"></param>
+        /// <returns> Remove the contract
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<Contract> Delete(int id)
+        {
+            // Remove contracts
+            var contract = await _context.Contracts.FindAsync(id);
+            _context.Contracts.Remove(contract);
+
+            // Return contracts
+            await _context.SaveChangesAsync();
+            return contract;
+        }
     }
 }
