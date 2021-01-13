@@ -40,8 +40,10 @@ namespace WebApiLoanContract.Controllers
         }
 
         /// <summary>
-        /// List all contracts with installments
+        /// Check that the feature flag for in memory cache data is enabled
+        /// and that the cache is already saved to list the contracts
         /// </summary>
+        /// <returns> List of all contracts with installments
         [HttpGet]
         [Route("")]
         public async Task<ActionResult<List<Contract>>> CacheGetOrCreate()
@@ -60,9 +62,12 @@ namespace WebApiLoanContract.Controllers
                 });
         }
 
+
         /// <summary>
-        /// List one contract with installments
+        /// Search for contract by id
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns> List one contract with installments
         [HttpGet]
         [Route("{id:int}")]
         public async Task<Contract> GetById(int id)
@@ -75,8 +80,11 @@ namespace WebApiLoanContract.Controllers
         }
 
         /// <summary>
-        /// Create and post all contracts with installments
+        /// Include installments according to the number set before post it all
+        /// and also verify data annotations
         /// </summary>
+        /// <param name="Contract model"></param>
+        /// <returns> Create and post all contracts with installments
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<Contract>> Post(
