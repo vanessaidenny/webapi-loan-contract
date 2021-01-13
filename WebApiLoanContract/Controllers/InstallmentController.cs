@@ -8,12 +8,11 @@ using WebApiLoanContract.Models;
 namespace WebApiLoanContract.Controllers
 {
     [ApiController]
-    [Route("v1/installments")]
+    [Route("installments")]
     public class InstallmentController : ControllerBase
     {
-        /// <summary>
-        /// List all installments
-        /// </summary>
+        /// <param name="DataContext context"></param>
+        /// <returns> List all installments
         [HttpGet]
         [Route("")]
         public async Task<ActionResult<List<Installment>>> Get([FromServices] DataContext context)
