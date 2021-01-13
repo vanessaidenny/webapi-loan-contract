@@ -41,7 +41,7 @@ namespace WebApiLoanContract.Controllers
 
         /// <summary>
         /// Check that the feature flag for in memory cache data is enabled
-        /// and that the cache is already saved to list the contracts
+        /// and that the cache is already saved before to list the contracts
         /// </summary>
         /// <returns> List of all contracts with installments
         [HttpGet]
@@ -61,7 +61,6 @@ namespace WebApiLoanContract.Controllers
                     return _service.GetContracts();
                 });
         }
-
 
         /// <summary>
         /// Search for contract by id

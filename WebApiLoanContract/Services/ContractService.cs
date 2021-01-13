@@ -15,6 +15,10 @@ namespace WebApiLoanContract.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Apply installment entity in each contract entity
+        /// </summary>
+        /// <returns> List of all contracts with installments
         public async Task<List<Contract>> GetContracts()
         {            
             var contracts = await _context.Contracts.ToListAsync();
