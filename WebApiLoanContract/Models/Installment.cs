@@ -9,7 +9,7 @@ namespace WebApiLoanContract.Models
     public class Installment
     {
         [Key]
-        public int InstallmentId { get; private set; }
+        public int InstallmentId { get; set; }
                 
         [JsonIgnore]
         public Contract Contract { get; set; }
@@ -28,8 +28,6 @@ namespace WebApiLoanContract.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime PaymentDate { get; set; }
 
-        [Required(ErrorMessage = "Required field")]
-        [Range(1, int.MaxValue, ErrorMessage = "The amount must be valid")]
         public decimal Amount { get; set; }
 
         [Display(Name = "Status")]

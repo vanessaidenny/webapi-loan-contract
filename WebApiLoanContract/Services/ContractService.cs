@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,11 +56,17 @@ namespace WebApiLoanContract.Services
         public async Task<ActionResult<Contract>> InsertInstallments(
             [FromBody] Contract model)
         {
+                var dividedAmount = model.AmountFinanced/model.NumberInstallments;
                 for (var i=1; i<model.NumberInstallments; i++)
                 {
-                    model.Installments.Add(new Installment());
+                    var installment = new Installment();
+                    model.Installments.Add(installment);
                 }
                 _context.Contracts.Add(model);
+                foreach (var installmentItem in model.Installments)
+                {                    
+                    installmentItem.Amount = dividedAmount;
+                }
                 await _context.SaveChangesAsync();
                 return model;
         }
@@ -73,11 +80,17 @@ namespace WebApiLoanContract.Services
             [FromBody] ContractPatchRequest request,
             [FromBody] Contract model)
         {
+            var dividedAmount = model.AmountFinanced/model.NumberInstallments;
                 for (var i=1; i<request.NumberInstallments; i++)
                 {
-                    request.Installments.Add(new Installment());
+                    var installment = new Installment();
+                    request.Installments.Add(installment);
                 }
                 model.Installments = request.Installments;
+                foreach (var installmentItem in model.Installments)
+                {                    
+                    installmentItem.Amount = dividedAmount;
+                }
                 await _context.SaveChangesAsync();
                 return model;
         }
