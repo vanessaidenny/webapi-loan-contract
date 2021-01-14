@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -30,8 +29,6 @@ namespace WebApiLoanContract.Models
 
         public decimal Amount { get; set; }
 
-        [Display(Name = "Status")]
-        [Required(ErrorMessage = "Required field")]
         public string Status { get; set; }
     }
 }
