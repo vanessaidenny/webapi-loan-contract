@@ -17,15 +17,9 @@ namespace WebApiLoanContract.Models
         [Required(ErrorMessage = "Required field")]        
         public int ContractId { get; set; }
 
-        [Required(ErrorMessage = "Required field")]
-        [DataType(DataType.Date, ErrorMessage = "Insert a date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ExpirationDate { get; set; }
 
-        [Required(ErrorMessage = "Required field")]
-        [DataType(DataType.Date, ErrorMessage = "Insert a date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         public decimal Amount { get; set; }
 

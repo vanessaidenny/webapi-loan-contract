@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,8 +64,11 @@ namespace WebApiLoanContract.Services
                 }
                 _context.Contracts.Add(model);
                 foreach (var installmentItem in model.Installments)
-                {                    
+                {
                     installmentItem.Amount = dividedAmount;
+                    installmentItem.PaymentDate = null;
+                    installmentItem.ExpirationDate = model.ContractDate.AddDays(30);
+                    installmentItem.Status = SetStatus(installmentItem);
                 }
                 await _context.SaveChangesAsync();
                 return model;
@@ -87,8 +91,9 @@ namespace WebApiLoanContract.Services
                 }
                 model.Installments = request.Installments;
                 foreach (var installmentItem in model.Installments)
-                {                    
+                {
                     installmentItem.Amount = dividedAmount;
+                    installmentItem.Status = SetStatus(installmentItem);
                 }
                 await _context.SaveChangesAsync();
                 return model;
@@ -121,6 +126,25 @@ namespace WebApiLoanContract.Services
                 .ToArrayAsync();
             _context.Installments.RemoveRange(installments);
             return contract;
+        }
+
+        /// <summary>
+        /// Define status according to the payment and expiration date
+        /// </summary>
+        /// <param name="Installment installmentItem"></param>
+        /// <returns> Status
+        public string SetStatus(Installment installmentItem)
+        {
+            if (installmentItem.PaymentDate != null)                
+                installmentItem.Status = "Marked";
+
+            if (installmentItem.ExpirationDate >= DateTime.Today)
+                installmentItem.Status = "Open";
+            
+            if (installmentItem.ExpirationDate < DateTime.Today)
+                installmentItem.Status = "Delayed";
+
+            return installmentItem.Status;
         }
     }
 }
