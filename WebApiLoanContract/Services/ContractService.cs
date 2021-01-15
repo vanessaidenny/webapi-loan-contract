@@ -63,11 +63,14 @@ namespace WebApiLoanContract.Services
                     model.Installments.Add(installment);
                 }
                 _context.Contracts.Add(model);
+
+                var expirationDate = model.ContractDate;
                 foreach (var installmentItem in model.Installments)
                 {
+                    expirationDate = expirationDate.AddDays(30);
                     installmentItem.Amount = dividedAmount;
                     installmentItem.PaymentDate = null;
-                    installmentItem.ExpirationDate = model.ContractDate.AddDays(30);
+                    installmentItem.ExpirationDate = expirationDate;
                     installmentItem.Status = SetStatus(installmentItem);
                 }
                 await _context.SaveChangesAsync();
